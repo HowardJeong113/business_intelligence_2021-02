@@ -1,6 +1,7 @@
 import csv
 from collections import defaultdict
 from datetime import datetime
+import math
 
 file_path = "com.samsung.shealth.step_daily_trend.202111072051.csv"
 with open(file_path, newline='') as csvfile:
@@ -26,6 +27,8 @@ with open(file_path, newline='') as csvfile:
         date_str = row[1]
 
         date = date_str[0:10]
+        if(str(date) == "2019-12-28"):
+            continue
         weekday = datetime.fromisoformat(date).weekday()
 
         count = int(row[5])
@@ -78,9 +81,6 @@ with open(weather_path, newline='') as csvfile:
 
         data_list.append(row)
 
-    # print(data_list)
-    # binning date 기준으로 count를 모음
-
     date_to_weather = {}
 
     for row in data_list:
@@ -91,14 +91,18 @@ with open(weather_path, newline='') as csvfile:
 
 weather_count = defaultdict(list)
 
+
+
 for k, v in date_to_count.items():
-    slider = 50
-    date_weather = date_to_weather[str(v['date'])] + slider
-    weather_grid = int(date_weather / 3) * 3 - slider
+    date_weather = math.floor(date_to_weather[str(v['date'])])  
+    weather_grid = date_weather - date_weather % 3 
+    if weather_grid == 0:
+        print(v)
     weather_count[weather_grid].append(v['count'])
 
 for k in sorted(weather_count.keys()):
     v = weather_count[k]
+    
     if(len(v) > 0):
         print(k, sum(v) / len(v))
 
