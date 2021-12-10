@@ -174,9 +174,11 @@ while True:
 
     real_expected = expected_mul * expected
 
+    real_expected = max(real_expected - real_expected % 500, 1000) 
+
     user_input_data.append((user_date, user_step_count, expected))
 
-    print("기대치는 ", real_expected, "입니다. (보정을 적용하지 않은 기대치는 ", expected, "입니다.) 달성률 : ", user_step_count / real_expected)
+    print("기대치는 ", int(real_expected), "입니다. (보정을 적용하지 않은 기대치는 ", int(expected), "입니다.) 달성률 : ", '{:.1%}'.format(user_step_count / real_expected))
 
 
 
