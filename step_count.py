@@ -124,11 +124,25 @@ for k in weekday_weather_count.keys():
 pprint(weekday_weather_avg)
 print("초기 데이터 로드 완료")
 
+import json
 # (date_str, count, expected)
 user_input_data = []
 
+user_input_data_path = "user_data.json"
+
+
+try:
+    with open(user_input_data_path, "r") as st_json:
+        user_input_data = json.load(st_json)
+        print("기존 데이터를 불러왔습니다.")
+except:
+    pass
 
 while True:
+    with open(user_input_data_path, "w") as json_file:
+
+        json.dump(user_input_data, json_file)
+
     # 예상 기대치 조절
     expected_mul_list = [1]
     for date_str, count, expected in user_input_data[:10]:
@@ -163,3 +177,10 @@ while True:
     user_input_data.append((user_date, user_step_count, expected))
 
     print("기대치는 ", real_expected, "입니다. (보정을 적용하지 않은 기대치는 ", expected, "입니다.) 달성률 : ", user_step_count / real_expected)
+
+
+
+
+
+
+
